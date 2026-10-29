@@ -83,3 +83,16 @@ Today the UI carries one line — the latest recording
 Dashboards. Rollback or restore-from-history. Automatic repairs. Remote
 services. Schedulers. Styling beyond native materials. Anything that
 would give this quiet thing a second job.
+
+## Creed (Moose, Oct 29 — the line the flagship stands on)
+
+Guardian will only guard.
+
+Timestamps are events for intentional investigation. They are not rewind
+points, not restore points, not representations of anything more than
+what they are. No dangling carrot — nothing that merely sounds cool gets
+to turn this into something it was never meant to be. It is the unsung
+hero precisely because it never auditioned for more: in twelve hours it
+helped trace a flapping gateway, crashing services, and a root-level
+ghost that survived a macOS install — by doing its one job, honestly,
+and nothing else.
