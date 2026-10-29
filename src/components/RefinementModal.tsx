@@ -12,7 +12,7 @@ export const RefinementModal: React.FC<RefinementModalProps> = ({ isOpen, onClos
   const [session, setSession] = useState<RefinementSession | null>(null), [checking, setChecking] = useState(true);
   const [items, setItems] = useState<RefinementItem[]>([]), [busy, setBusy] = useState(false), [error, setError] = useState(''), [notice, setNotice] = useState('');
   const [title, setTitle] = useState(''), [details, setDetails] = useState(''), [category, setCategory] = useState<RefinementItem['category']>('general'), [priority, setPriority] = useState<RefinementItem['priority']>('normal');
-  const [assistant, setAssistant] = useState('ChatGPT / Codex'), [preview, setPreview] = useState('');
+  const [assistant, setAssistant] = useState('Ara'), [preview, setPreview] = useState('');
   const [tab, setTab] = useState<'write' | 'saved'>('write');
   useEffect(() => {
     if (!isOpen) return;
@@ -66,7 +66,7 @@ export const RefinementModal: React.FC<RefinementModalProps> = ({ isOpen, onClos
             <button className={button} disabled={busy || !title.trim() || !details.trim()}>{busy ? 'SAVING…' : 'SUBMIT AUTHENTICATED SUGGESTION'}</button>
           </form> : <div className="space-y-4">
             <p className="text-[11px] text-[var(--text-secondary)]">Most recent 200 submissions. {session.role === 'owner' ? 'Your refinements and visitor suggestions are listed here.' : 'Only your submissions are shown.'}</p>
-            <label className="block text-xs text-[var(--text-secondary)]">Assistant for handoff<select className={input} value={assistant} onChange={e => { setAssistant(e.target.value); setPreview(''); }}>{['ChatGPT / Codex','Hermes','GrokBot','Grok Build','Other assistant'].map(a => <option key={a}>{a}</option>)}</select></label>
+            <label className="block text-xs text-[var(--text-secondary)]">Assistant for handoff<select className={input} value={assistant} onChange={e => { setAssistant(e.target.value); setPreview(''); }}>{['Ara','Hermes','ChatGPT / Codex','GrokBot','Grok Build','Other assistant'].map(a => <option key={a}>{a}</option>)}</select></label>
             <p className="text-[11px] text-[var(--text-muted)]">Copy or download a brief, then open it in your chosen assistant. Nothing is sent automatically.</p>
             {items.length === 0 && <p className="text-xs text-[var(--text-secondary)]">No suggestions submitted yet.</p>}
             {items.length > 0 && <button className={button} onClick={() => setPreview(buildBatchIterationPrompt(items, assistant))}>PREVIEW ALL BRIEFS</button>}

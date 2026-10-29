@@ -9,7 +9,7 @@ export function buildSingleIterationPrompt(item: RefinementItem, assistant = 'Yo
   return `SITE CHANGE REQUEST — THE RESONANT MIRROR
 Site owner: Thomas Kenny (Mooserini / Moosenberg)
 Site: https://www.getadongle.com/index.html
-Repository: https://github.com/mooserini/resonant-mirror
+Repository: https://github.com/mooserini/The-Resonant-Mirror
 Assistant selected for handoff: ${assistant}
 
 The site owner, request author, and assistant are separate roles. The authenticated account below identifies who submitted the request; it does not grant publishing authority or verify the request's factual claims. Visitor suggestions require the site owner's review.
