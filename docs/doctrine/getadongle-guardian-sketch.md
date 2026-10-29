@@ -37,3 +37,11 @@ rename ships with the new duty — see the night's rename decision.)
   switched off by a provider isn't a witness; the floor makes it one.
 - Order of parishes is Moose's call (rename decision): .env watch is
   the config-language natural next step; SSH keys are the vault door.
+
+## Rename trigger + icon (Moose, Oct 29 — Ara writing it down)
+
+- The `.env` watch is the teeny step that earns the rename: it gives the
+  credit the rename needs. Rename ships WITH the .env duty, then the
+  Guardian is brought into the main project. SSH keys follow after.
+- No icon redesign: the mark stays exactly what it is — a shield in
+  bronze guarding a document.
