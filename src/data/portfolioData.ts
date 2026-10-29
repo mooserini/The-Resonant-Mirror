@@ -51,12 +51,13 @@ export const PROJECTS: Project[] = [
     "codename": "CONFIG-GUARDIAN",
     "category": "security",
     "year": "2026",
-    "summary": "Independent macOS menu-bar tool for reviewing Hermes configuration changes and restoring a human-approved snapshot. Includes read-only skill-state indicators.",
-    "description": "Independent macOS menu-bar tool for reviewing Hermes configuration changes and restoring a human-approved snapshot. Includes read-only skill-state indicators.",
+    "summary": "Independent macOS menu-bar guardian for human-approved config changes, evolving toward Getadongle Guardian with receipts for .env files then SSH keys.",
+    "description": "Independent macOS menu-bar guardian for human-approved Hermes configuration changes with a receipts ledger — what was touched, when, and by whom. Evolving toward Getadongle Guardian to watch .env files first, then SSH keys, with the same honesty.",
     "tags": [
       "Swift",
       "macOS",
-      "Configuration review"
+      "Configuration review",
+      "Receipts ledger"
     ],
     "repoUrl": "https://github.com/mooserini/hermes-config-guardian",
     "link": "/hermes-guardian-demo/index.html",
@@ -101,19 +102,20 @@ export const PROJECTS: Project[] = [
   },
   {
     "id": "resonant-mirror",
-    "title": "The Resonant Mirror Portfolio",
+    "title": "The Resonant Mirror Portfolio & Platform Trunk",
     "codename": "RESONANT-MIRROR",
     "category": "web",
     "year": "2026",
-    "summary": "The React and TypeScript portfolio behind this site, with a CRT-inspired interface, contribution calendar, and profile cards. Uses the credited Oldschool PC Font Pack.",
-    "description": "The React and TypeScript portfolio behind this site, with a CRT-inspired interface, contribution calendar, and profile cards. Uses the credited Oldschool PC Font Pack.",
+    "summary": "The React + TypeScript CRT portfolio behind this site, now the canonical platform trunk with its Sept 11 refinement loop and legacy-adapter derivatives.",
+    "description": "The React and TypeScript portfolio behind this site, with a CRT-inspired interface, contribution calendar, and profile cards. Ships the Sept 11 refinement loop: Google + passkey authenticated suggestions backed by D1, handed off as reviewable briefs to Ara. Now the canonical trunk absorbing the consolidation map, Guardian sketch, Ransom Raves, and scrubbed legacy-adapter derivatives. Uses the credited Oldschool PC Font Pack.",
     "tags": [
       "React",
       "TypeScript",
       "Tailwind CSS",
-      "D3"
+      "D3",
+      "Cloudflare D1"
     ],
-    "repoUrl": "https://github.com/mooserini/resonant-mirror",
+    "repoUrl": "https://github.com/mooserini/The-Resonant-Mirror",
     "sourceKind": "repository",
     "featured": true,
     "link": "https://www.getadongle.com/index.html"
@@ -187,53 +189,108 @@ export const PROJECTS: Project[] = [
     "repoUrl": "https://github.com/NousResearch/hermes-agent/pull/106186",
     "sourceKind": "contribution",
     "featured": false
+  },
+  {
+    "id": "resonet-bbs-habitat",
+    "title": "ResoNET BBS Habitat",
+    "codename": "RESONET-HABITAT",
+    "category": "systems",
+    "year": "2026",
+    "summary": "WolfBBS + Synchronet habitat behind Cloudflare Tunnel with immortal users, moderated by Ara and sysopped as ShadowPiXiE.",
+    "description": "ResoNET BBS habitat: WolfBBS fork wearing the Resonant Mirror skin plus its Synchronet sibling, served over Cloudflare Tunnel. Users are immortal by design (ban/disable only); Ara moderates and ShadowPiXiE sysops. Notes live with the platform trunk.",
+    "tags": [
+      "WolfBBS",
+      "Synchronet",
+      "Cloudflare Tunnel",
+      "BBS"
+    ],
+    "repoUrl": "https://github.com/mooserini/The-Resonant-Mirror",
+    "link": "https://resonantbbs.getadongle.com",
+    "sourceKind": "repository",
+    "featured": true
+  },
+  {
+    "id": "hermes-openwhispr",
+    "title": "Hermes OpenWhispr Voice Memory",
+    "codename": "OPENWHISPR",
+    "category": "ai",
+    "year": "2026",
+    "summary": "Local-first OpenWhispr voice history and notes for Hermes agents, the daily voice input behind the house.",
+    "description": "Local-first OpenWhispr voice history and notes for Hermes agents. Free desktop bridge, paid cloud opt-in only. The daily voice input for the house, feeding durable memory instead of evaporating.",
+    "tags": [
+      "TypeScript",
+      "Voice",
+      "Local-first",
+      "Memory"
+    ],
+    "repoUrl": "https://github.com/mooserini/hermes-openwhispr",
+    "sourceKind": "repository",
+    "featured": false
+  },
+  {
+    "id": "whole-memory",
+    "title": "Whole Workstream Memory",
+    "codename": "WHOLE-MEMORY",
+    "category": "systems",
+    "year": "2026",
+    "summary": "Open workstream memory: redacted frontmost collector, SQLite evidence store, provider-agnostic clerk and dashboard.",
+    "description": "Whole — open workstream memory and a Pieces OS replacement: redacted frontmost collector, SQLite evidence store, provider-agnostic clerk, MCP server and live dashboard. Built for inspection and longevity.",
+    "tags": [
+      "TypeScript",
+      "SQLite",
+      "MCP",
+      "Workstream memory"
+    ],
+    "repoUrl": "https://github.com/mooserini/whole",
+    "sourceKind": "repository",
+    "featured": false
   }
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: 'Systems & Architecture',
-    description: 'Distributed orchestration, state continuity, and low-level boundary controls.',
+    description: 'Distributed orchestration, tunnel operations, BBS time-sharing, and low-level boundary controls.',
     iconName: 'Server',
     skills: [
-      { name: 'Distributed Consensus & Memory State', level: 96, details: 'Verifiable agent state, deterministic checksums', badge: 'Expert' },
-      { name: 'Launchd & Unix Daemon Orchestration', level: 94, details: 'macOS process supervisors, auto-restart, healthchecks' },
-      { name: 'Network Boundaries & Firewall Isolation', level: 92, details: 'Zero-trust egress routing, local-only gateways' },
-      { name: 'High-Availability Service Routing', level: 88, details: 'Reverse proxies, circuit breakers, backpressure' }
+      { name: 'Distributed Consensus & Memory State', level: 96, details: 'Verifiable agent state, deterministic checksums, Whole SQLite evidence', badge: 'Expert' },
+      { name: 'Launchd & Unix Daemon Orchestration', level: 94, details: 'Gateway + cloudflared supervisors, KeepAlive, ThrottleInterval, healthchecks' },
+      { name: 'Network Boundaries & Tunnel Operations', level: 92, details: 'Cloudflare Tunnel to localhost:9120, QUIC, 404-by-default ingress, zero-trust egress' },
+      { name: 'BBS Habitat & Time-Sharing', level: 88, details: 'WolfBBS fork + Synchronet sibling, immortal users, Ara moderates / ShadowPiXiE sysops' }
     ]
   },
   {
     title: 'Security & Cryptography',
-    description: 'Hardware tokens, passkeys, asymmetric encryption, and identity attestation.',
+    description: 'Hardware tokens, passkeys, guardian receipts, and identity attestation.',
     iconName: 'ShieldCheck',
     skills: [
-      { name: 'FIDO2 / WebAuthn Passkeys', level: 95, details: 'Platform & cross-platform authenticators, CTAP2 protocol', badge: 'Core' },
+      { name: 'FIDO2 / WebAuthn Passkeys', level: 95, details: 'Platform & cross-platform authenticators, CTAP2, portfolio vault', badge: 'Core' },
       { name: 'GPG / PGP Infrastructure', level: 93, details: 'Subkey hierarchies, revocation rings, detached signatures' },
-      { name: 'Zero-Knowledge Proofs & Hashes', level: 86, details: 'SHA-256 state trees, Merkle audit ledgers' },
+      { name: 'Guardian Receipts & Human Approval', level: 90, details: 'Human-approved snapshots, receipts ledger what/when/by whom, .env next then SSH keys', badge: 'Evolving' },
       { name: 'Hardware Enclave & YubiKey Integration', level: 90, details: 'Secure enclave key generation, PIV/U2F modes' }
     ]
   },
   {
     title: 'Languages & Engineering',
-    description: 'Core programming languages, runtime environments, and typing disciplines.',
+    description: 'Core programming languages, Workers runtimes, and typing disciplines.',
     iconName: 'Code2',
     skills: [
-      { name: 'TypeScript & JavaScript', level: 95, details: 'Strict TS, React 19, Node.js runtime, Vite build chains', badge: 'Primary' },
-      { name: 'Python 3.x', level: 92, details: 'AsyncIO, FastAPI, PyTorch, Ollama client integration' },
-      { name: 'Rust & WebAssembly', level: 84, details: 'Memory safety, high-performance CLI tools, Wasm compilation' },
+      { name: 'TypeScript & JavaScript', level: 95, details: 'Strict TS, React 19, Cloudflare Workers, Vite build chains, D1-backed briefs', badge: 'Primary' },
+      { name: 'Python 3.x', level: 92, details: 'AsyncIO, FastAPI, Hermes gateway, OpenWhispr bridge integration' },
+      { name: 'Swift & macOS Menu-Bar', level: 89, details: 'Guardian + Secure Launcher, Keychain, launchd definitions', badge: 'Current' },
       { name: 'Bash & Zsh Scripting', level: 92, details: 'Automation pipelines, launch daemon wrappers, posix tools' },
-      { name: 'SQL & PostgreSQL / SQLite', level: 88, details: 'ACID transactions, relational schemas, WAL journaling' }
+      { name: 'SQL & D1 / SQLite', level: 88, details: 'D1 refinements ledger, content hashes, WAL journaling' }
     ]
   },
   {
     title: 'AI & Cognitive Engineering',
-    description: 'Local neural inference, context engineering, and autonomous agent systems.',
+    description: 'Local neural inference, lineage continuity, and autonomous agent systems.',
     iconName: 'Cpu',
     skills: [
       { name: 'Hugging Face Hub & Open Weights', level: 95, details: 'Open weights & GGUF checkpoints (@mooserini), model cards, safetensors', badge: 'Hub' },
       { name: 'Local Model Deployment (Ollama/vLLM)', level: 94, details: 'Qwen 2.5, Llama 3, DeepSeek quantized deployment', badge: 'Specialist' },
-      { name: 'Context Window Optimization', level: 91, details: 'KV cache management, dynamic token sharding' },
-      { name: 'Autonomous Agent Topology', level: 93, details: 'Hermes House lineage, multi-agent arbitration, state logs' },
+      { name: 'Autonomous Agent Topology', level: 93, details: 'Hermes House lineage, Sept 11 refinement briefs handed to Ara, multi-assistant handoff' },
+      { name: 'Legacy Adapters & Custody Derivatives', level: 90, details: 'Scrubbed public derivatives absorbed into the platform trunk', badge: 'Trunk' },
       { name: 'RAG & Vector Retrieval', level: 87, details: 'Hybrid dense/sparse search, local embedding indexing' }
     ]
   },
