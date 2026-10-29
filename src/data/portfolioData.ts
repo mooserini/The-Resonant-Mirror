@@ -65,24 +65,6 @@ export const PROJECTS: Project[] = [
     "featured": true
   },
   {
-    "id": "hermes-secure-launcher",
-    "title": "Hermes Secure Launcher",
-    "codename": "SECURE-LAUNCHER",
-    "category": "security",
-    "year": "2026",
-    "summary": "Independent macOS menu-bar controller for starting, stopping, and checking a Hermes gateway through a Keychain-backed launchd definition.",
-    "description": "Independent macOS menu-bar controller for starting, stopping, and checking a Hermes gateway through a Keychain-backed launchd definition.",
-    "tags": [
-      "Swift",
-      "macOS",
-      "Keychain",
-      "launchd"
-    ],
-    "repoUrl": "https://github.com/mooserini/hermes-secure-launcher",
-    "sourceKind": "repository",
-    "featured": true
-  },
-  {
     "id": "mac-inac-sendblue",
     "title": "Mac-Inac iMessage Bridge",
     "codename": "MAC-INAC",
