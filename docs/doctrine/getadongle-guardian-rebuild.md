@@ -84,6 +84,11 @@ Dashboards. Rollback or restore-from-history. Automatic repairs. Remote
 services. Schedulers. Styling beyond native materials. Anything that
 would give this quiet thing a second job.
 
+Legacy skill hygiene is also out of scope: the unmanaged, pre-provenance
+skills stay untouched. Hand-adopting or hand-archiving them races the
+harness's own lifecycle (untrash versus auto-trash is a race nobody
+wins) — leave them alone.
+
 ## Creed (Moose, Oct 29 — the line the flagship stands on)
 
 Guardian will only guard.
