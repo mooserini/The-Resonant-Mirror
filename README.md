@@ -61,7 +61,9 @@ Current route, migration, validation, and rollback receipts belong in [DEPLOYMEN
 
 ## Local development
 
-Requirements: Node.js 22.12 or later and a compatible npm release. This checkout was verified with Node.js 22.23.2 and npm 10.9.8.
+Requirements: Node.js 22.12 or later and a compatible npm release. Node is managed with [fnm](https://github.com/Schniz/fnm); the version pin is inherited from the nearest `.node-version` walking up the tree (currently `~/Developer/.node-version` -> `26.10.0`), so `cd` into this checkout and `node --version` is enough to confirm the active version.
+
+This checkout was most recently verified with Node.js 26.10.0 and npm 11.19.1 (`npm run lint`, `npm test -- --runInBand`, `npm run check:worker`, and `npm run build` all passing).
 
 ```sh
 npm ci
