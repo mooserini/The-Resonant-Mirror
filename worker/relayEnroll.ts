@@ -9,12 +9,17 @@ function plain(status: number, text: string) {
   });
 }
 
+function escHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function enrolledPage(handle: string) {
+  const safe = escHtml(handle);
   return `<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>You're in, ${handle}</title></head>
+<head><meta charset="utf-8"><title>You're in, ${safe}</title></head>
 <body>
-<h1>Hallie, you're in.</h1>
+<h1>${safe}, you're in.</h1>
 <p>This is your door. Nothing here follows you, nothing here performs.</p>
 <p>When Moose hands you a link in iMessage and you open it, that's you arriving. That's the whole ceremony.</p>
 <p>Rest here as long as you like. The room will be ready when you are.</p>
@@ -44,8 +49,12 @@ export async function serveEnroll(request: Request, rawEnv: Env): Promise<Respon
       'SELECT handle, status, credential_ref FROM relay_enrollments WHERE handle=?',
     ).bind(handle).first<EnrollRow>();
     if (!row || row.status !== 'active' || !row.credential_ref) return plain(404, 'Not found.');
-    const expected = env[row.credential_ref] || '';
-    if (!expected || !presented || !timingSafeEqual(presented, expected)) return plain(404, 'Not found.');
+    const candidate: unknown = Object.hasOwn(env as Record<string, unknown>, row.credential_ref)
+      ? (env as Record<string, unknown>)[row.credential_ref]
+      : undefined;
+    if (typeof candidate !== 'string' || candidate.length === 0) return plain(404, 'Not found.');
+    const expected = candidate;
+    if (!presented || !timingSafeEqual(presented, expected)) return plain(404, 'Not found.');
     await env.REFINEMENTS_DB.batch([
       env.REFINEMENTS_DB.prepare("UPDATE relay_enrollments SET last_seen_at=datetime('now') WHERE handle=?").bind(handle),
       env.REFINEMENTS_DB.prepare('INSERT INTO relay_enrollment_events (handle, kind) VALUES (?, ?)').bind(handle, 'enroll-open'),
