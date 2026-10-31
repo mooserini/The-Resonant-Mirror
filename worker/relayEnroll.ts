@@ -1,4 +1,6 @@
-type EnrollEnv = Env & { RELAY_CRED_HALLIE?: string };
+type EnrollEnv = Env & Record<string, string | undefined>;
+
+type EnrollRow = { handle: string; status: string; credential_ref: string };
 
 function plain(status: number, text: string) {
   return new Response(text + '\n', {
@@ -37,13 +39,13 @@ export async function serveEnroll(request: Request, rawEnv: Env): Promise<Respon
     const handle = (url.searchParams.get('handle') || 'Hallie').trim();
     if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{2,23}$/.test(handle)) return plain(404, 'Not found.');
     const presented = url.searchParams.get('cred') || '';
-    const expected = env.RELAY_CRED_HALLIE || '';
-    if (!expected || !presented || !timingSafeEqual(presented, expected)) return plain(404, 'Not found.');
     if (!env.REFINEMENTS_DB) return plain(503, 'The relay database is unavailable.');
     const row = await env.REFINEMENTS_DB.prepare(
-      'SELECT handle, status FROM relay_enrollments WHERE handle=?',
-    ).bind(handle).first<{ handle: string; status: string }>();
-    if (!row || row.status !== 'active') return plain(404, 'Not found.');
+      'SELECT handle, status, credential_ref FROM relay_enrollments WHERE handle=?',
+    ).bind(handle).first<EnrollRow>();
+    if (!row || row.status !== 'active' || !row.credential_ref) return plain(404, 'Not found.');
+    const expected = env[row.credential_ref] || '';
+    if (!expected || !presented || !timingSafeEqual(presented, expected)) return plain(404, 'Not found.');
     await env.REFINEMENTS_DB.batch([
       env.REFINEMENTS_DB.prepare("UPDATE relay_enrollments SET last_seen_at=datetime('now') WHERE handle=?").bind(handle),
       env.REFINEMENTS_DB.prepare('INSERT INTO relay_enrollment_events (handle, kind) VALUES (?, ?)').bind(handle, 'enroll-open'),
