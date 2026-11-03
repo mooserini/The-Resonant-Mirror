@@ -53,14 +53,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGpg, onOpenRefinement }) =
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div id="footer-action-row" className="flex flex-wrap items-center justify-center gap-2">
+            {/* Invisible landing slots for the floating QR and DOS actions. */}
+            <span aria-hidden="true" className="invisible hidden h-9 w-9 shrink-0 border-2 lg:block" />
             {onOpenRefinement && (
               <button
+                id="footer-refine-btn"
                 onClick={() => {
                   retroAudio.playKeyclick();
                   onOpenRefinement();
                 }}
-                className="retro-btn px-3 py-1.5 flex items-center gap-1.5 cursor-pointer font-bold bg-[var(--rm-status)]/20 text-[var(--rm-status)] border-[var(--rm-status)] hover:bg-[var(--rm-status)] hover:text-black transition-colors"
+                className="retro-btn px-3 py-2 flex items-center gap-1.5 cursor-pointer font-mono text-xs font-bold bg-[var(--rm-status)]/20 text-[var(--rm-status)] border-[var(--rm-status)] hover:bg-[var(--rm-status)] hover:text-black transition-colors"
                 aria-label="Enter refinement session"
                 title="Sign in to propose a change and prepare a brief for your chosen assistant"
               >
@@ -69,9 +72,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGpg, onOpenRefinement }) =
               </button>
             )}
 
+            <span aria-hidden="true" className="invisible hidden shrink-0 items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold lg:flex">
+              <span className="h-2 w-2 rounded-full" />
+              <span>&gt;_ DOS PROMPT [~]</span>
+            </span>
+
             <button
               onClick={scrollToTop}
-              className="retro-btn px-3 py-1.5 flex items-center gap-1.5 cursor-pointer font-bold"
+              className="retro-btn px-3 py-2 flex items-center gap-1.5 cursor-pointer font-mono text-xs font-bold"
               aria-label="Scroll to top of page"
             >
               <ArrowUp className="w-3.5 h-3.5" />

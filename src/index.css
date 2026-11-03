@@ -69,6 +69,12 @@ body {
   letter-spacing: 0.02em;
 }
 
+/* Keep anchored sections clear of the sticky header, with a small cushion. */
+section[id],
+footer[id] {
+  scroll-margin-top: 88px;
+}
+
 /* Retro Scanlines (Optional user toggle) */
 .scanlines-overlay {
   background: linear-gradient(
