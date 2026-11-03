@@ -397,9 +397,6 @@ export default function App() {
                   <span id="expanded-qr-title" className="mt-4 block font-mono text-sm font-bold text-[var(--text-primary)] group-hover:underline">
                     Thomas Kenny — Gravatar profile
                   </span>
-                  <span className="mt-1 block break-all font-mono text-[11px] text-[var(--text-secondary)]">
-                    {PERSONAL_INFO.gravatarUrl}
-                  </span>
                 </a>
                 <button
                   type="button"

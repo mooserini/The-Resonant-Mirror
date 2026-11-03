@@ -114,8 +114,8 @@ export const ContactSection: React.FC = () => {
 
         {/* Form or Receipt View */}
         <div className="p-6 sm:p-8">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-            <div className="min-w-0 flex-1">
+          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,42rem)_minmax(0,1fr)]">
+            <div className="min-w-0">
           {receipt ? (
             /* Submission Success Terminal Receipt */
             <div className="space-y-5">
@@ -314,8 +314,8 @@ export const ContactSection: React.FC = () => {
           )}
             </div>
 
-            <aside className="mx-auto w-full max-w-xs shrink-0 lg:mx-0 lg:w-64" aria-label="Gravatar QR code">
-              <div className="border-2 border-[var(--border-strong)] bg-[var(--bg-secondary)] p-4 text-center shadow-lg">
+            <aside className="w-full lg:self-center" aria-label="Gravatar QR code">
+              <div className="mx-auto w-full max-w-xs lg:max-w-[16rem] border-2 border-[var(--border-strong)] bg-[var(--bg-secondary)] p-4 text-center shadow-lg">
                 <a
                   href={gravatarQrUrl}
                   target="_blank"
@@ -332,9 +332,6 @@ export const ContactSection: React.FC = () => {
                   </span>
                   <span className="mt-3 block font-mono text-xs font-bold text-[var(--text-primary)] group-hover:underline">
                     Thomas Kenny — Gravatar profile
-                  </span>
-                  <span className="mt-1 block break-all font-mono text-[10px] leading-relaxed text-[var(--text-secondary)]">
-                    {PERSONAL_INFO.gravatarUrl}
                   </span>
                 </a>
               </div>
