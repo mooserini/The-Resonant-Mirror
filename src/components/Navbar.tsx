@@ -305,7 +305,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="xl:hidden border-t border-[var(--border-color)] py-3 px-2 space-y-2 bg-[var(--bg-card)]">
+          <div id="nav-mobile-menu" className="xl:hidden border-t border-[var(--border-color)] py-3 px-2 space-y-2 bg-[var(--bg-card)]">
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -379,7 +379,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
               <div className="flex w-full gap-2 justify-between">
                 <button
-                  onClick={onToggleScanlines}
+                  id="nav-scanlines-mobile-btn"
+                  onClick={() => {
+                    retroAudio.playKeyclick();
+                    onToggleScanlines();
+                  }}
                   className="flex-1 px-2 py-1 text-xs border border-[var(--border-strong)] text-center"
                 >
                   SCANLINES: {scanlines ? 'ON' : 'OFF'}

@@ -15,6 +15,9 @@ import { retroAudio } from '../utils/audio';
 
 interface TourStep {
   target?: string;
+  /** Below the xl breakpoint the desktop target is display:none; this
+   *  is the equivalent control to spotlight instead, when one exists. */
+  mobileTarget?: string;
   title: string;
   body: string;
 }
@@ -33,13 +36,15 @@ const STEPS: TourStep[] = [
   },
   {
     target: '#nav-theme-toggle-btn',
+    mobileTarget: '#nav-theme-mobile-btn',
     title: 'LIGHT AND DARK',
-    body: 'This button flips the whole site between Resonant Paper and Obsidian CRT Phosphor. Your choice is remembered — and it follows you to the BBS, because both doors read the same house cookie.',
+    body: 'This button flips the whole site between Resonant Paper and Obsidian CRT Phosphor. Your choice is remembered — and it follows you to the BBS, because both doors read the same house cookie. On a phone, the same switch rides in the top bar, right beside the hamburger.',
   },
   {
     target: '#nav-scanlines-btn',
+    mobileTarget: '#nav-scanlines-mobile-btn',
     title: 'THE CRT EFFECT',
-    body: 'Scanlines and phosphor glow, for the full 1986 effect. Purely cosmetic, purely yours: toggle it here and the preference travels with you across the project.',
+    body: 'Scanlines and phosphor glow, for the full 1986 effect. Purely cosmetic, purely yours: toggle it here and the preference travels with you across the project. On a phone, this switch lives in the hamburger menu — the tour opens it for you at this stop.',
   },
   {
     target: '#floating-dos-btn',
@@ -53,10 +58,41 @@ const STEPS: TourStep[] = [
   },
   {
     target: `a[href="${BBS_URL}"]`,
+    // Same link, narrow edition: below xl the nav copy is display:none
+    // and the live one rides in the hamburger menu (opened for this
+    // step, like the preference stops). The resolver picks whichever
+    // copy actually renders.
+    mobileTarget: `a[href="${BBS_URL}"]`,
     title: 'THE OTHER DOOR: RESONANT BBS',
     body: 'And out back: a Synchronet BBS where the agents live — Maren, Ara, Echo and friends log in as ordinary users, play Legend of the Red Dragon, and take their mail there. The terminal there renders exactly as its author designed it; your theme and CRT choices dress the room around it, never the board itself.',
   },
 ];
+
+// Below the xl breakpoint the desktop nav buttons are display:none and
+// measure 0x0. The mobile equivalents live in and around the hamburger
+// menu — and the ones inside it only measure while the menu is open.
+const isNarrowViewport = () => !window.matchMedia('(min-width: 1280px)').matches;
+const mobileMenuIsOpen = () => !!document.querySelector('#nav-mobile-menu');
+const clickMobileMenuToggle = () => {
+  (document.querySelector('#nav-mobile-toggle') as HTMLElement | null)?.click();
+};
+
+// The element a step should spotlight right now: its mobile equivalent
+// on a narrow viewport, its desktop target otherwise — and only when
+// it actually renders (a hidden target is no target at all).
+const resolveTargetEl = (s: TourStep): HTMLElement | null => {
+  const selectors: string[] = [];
+  if (s.mobileTarget && isNarrowViewport()) selectors.push(s.mobileTarget);
+  if (s.target) selectors.push(s.target);
+  for (const selector of selectors) {
+    const matches = document.querySelectorAll(selector);
+    for (const el of Array.from(matches)) {
+      const rect = (el as HTMLElement).getBoundingClientRect();
+      if (rect.width > 0 || rect.height > 0) return el as HTMLElement;
+    }
+  }
+  return null;
+};
 
 interface Ring {
   top: number;
@@ -70,27 +106,36 @@ export const WelcomeTour: React.FC<{ onFinish: () => void }> = ({ onFinish }) =>
   const [ring, setRing] = useState<Ring | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  // True only while the mobile menu is open because the tour opened
+  // it — a menu the visitor had open already is left as found.
+  const openedMenuRef = useRef(false);
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
 
-  const measure = useCallback(() => {
-    const selector = STEPS[step].target;
-    if (!selector) {
-      setRing(null);
-      return;
+  // Keep the hamburger menu in the state the current step needs:
+  // open for the preference stops on narrow viewports (their targets
+  // only exist while it is open), restored afterwards — and only
+  // ever touching a menu the tour itself opened.
+  const syncMobileMenu = useCallback(() => {
+    const needsMenu = isNarrowViewport() && !!STEPS[step].mobileTarget;
+    if (needsMenu && !mobileMenuIsOpen()) {
+      openedMenuRef.current = true;
+      clickMobileMenuToggle();
+    } else if (!needsMenu && openedMenuRef.current) {
+      openedMenuRef.current = false;
+      if (mobileMenuIsOpen()) clickMobileMenuToggle();
     }
-    const el = document.querySelector(selector) as HTMLElement | null;
+  }, [step]);
+
+  const measure = useCallback(() => {
+    const el = resolveTargetEl(STEPS[step]);
     if (!el) {
+      // No visible target for this step (step 1 by design, anything
+      // else only as a last resort): fall back to a centered card.
       setRing(null);
       return;
     }
     const rect = el.getBoundingClientRect();
-    if (rect.width === 0 && rect.height === 0) {
-      // Target exists but is hidden (e.g. desktop nav on a phone):
-      // fall back to a centered card for this step.
-      setRing(null);
-      return;
-    }
     const pad = 6;
     setRing({
       top: rect.top - pad,
@@ -101,18 +146,22 @@ export const WelcomeTour: React.FC<{ onFinish: () => void }> = ({ onFinish }) =>
   }, [step]);
 
   useEffect(() => {
-    const selector = current.target;
-    if (selector) {
-      const el = document.querySelector(selector) as HTMLElement | null;
-      if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }
+    syncMobileMenu();
+    const el = resolveTargetEl(current);
+    if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
     const t = window.setTimeout(measure, 380);
-    window.addEventListener('resize', measure);
+    const onResize = () => {
+      // Crossing the xl breakpoint mid-tour swaps which targets
+      // exist: match the menu to the new width, then re-measure.
+      syncMobileMenu();
+      measure();
+    };
+    window.addEventListener('resize', onResize);
     return () => {
       window.clearTimeout(t);
-      window.removeEventListener('resize', measure);
+      window.removeEventListener('resize', onResize);
     };
-  }, [current, measure]);
+  }, [current, measure, syncMobileMenu]);
 
   useEffect(() => {
     cardRef.current?.focus();
@@ -150,6 +199,11 @@ export const WelcomeTour: React.FC<{ onFinish: () => void }> = ({ onFinish }) =>
   }, []);
 
   const finish = useCallback(() => {
+    // Leave the room as it was found: close a menu the tour opened.
+    if (openedMenuRef.current) {
+      openedMenuRef.current = false;
+      if (mobileMenuIsOpen()) clickMobileMenuToggle();
+    }
     retroAudio.playKeyclick();
     onFinish();
   }, [onFinish]);
