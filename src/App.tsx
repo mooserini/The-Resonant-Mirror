@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroBio } from './components/HeroBio';
 import { ProjectsSection } from './components/ProjectsSection';
@@ -19,6 +19,7 @@ import { getCurrentFidoSession, refreshFidoSession } from './utils/fidoAuth';
 import { isTourDone, markTourDone, resolveInitialScanlines, resolveInitialTheme, writeVisitorPrefs } from './utils/visitorPrefs';
 import { WelcomeTour } from './components/WelcomeTour';
 import { retroAudio } from './utils/audio';
+import { PERSONAL_INFO } from './data/portfolioData';
 
 export default function App() {
   const [booting, setBooting] = useState<boolean>(() => {
@@ -65,6 +66,9 @@ export default function App() {
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isRefinementModalOpen, setIsRefinementModalOpen] = useState(false);
+  const [isQrExpanded, setIsQrExpanded] = useState(false);
+  const floatingActionsRef = useRef<HTMLDivElement>(null);
+  const floatingRefineRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const openLinkedDispatches = () => {
@@ -103,6 +107,66 @@ export default function App() {
   useEffect(() => {
     writeVisitorPrefs({ scanlines });
   }, [scanlines]);
+
+  // Dock the floating actions onto their footer row when it is on screen.
+  // The footer carries invisible QR and DOS landing slots, so aligning the
+  // floating refinement button with its static twin completes the row.
+  useEffect(() => {
+    if (booting || typeof window === 'undefined') return;
+
+    const cluster = floatingActionsRef.current;
+    const floatingRefine = floatingRefineRef.current;
+    const footerRefine = document.getElementById('footer-refine-btn');
+    if (!cluster || !floatingRefine || !footerRefine) return;
+
+    let frame = 0;
+    let docked = false;
+
+    const clearDock = () => {
+      cluster.style.left = '';
+      cluster.style.top = '';
+      cluster.style.right = '';
+      cluster.style.bottom = '';
+      docked = false;
+    };
+
+    const update = () => {
+      frame = 0;
+      if (window.innerWidth < 1024) {
+        if (docked) clearDock();
+        return;
+      }
+
+      const footerRect = footerRefine.getBoundingClientRect();
+      const shouldDock = footerRect.top < window.innerHeight && footerRect.bottom > 0;
+      if (!shouldDock) {
+        if (docked) clearDock();
+        return;
+      }
+
+      const clusterRect = cluster.getBoundingClientRect();
+      const floatingRect = floatingRefine.getBoundingClientRect();
+      cluster.style.left = `${clusterRect.left + footerRect.left - floatingRect.left}px`;
+      cluster.style.top = `${clusterRect.top + footerRect.top - floatingRect.top}px`;
+      cluster.style.right = 'auto';
+      cluster.style.bottom = 'auto';
+      docked = true;
+    };
+
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      clearDock();
+    };
+  }, [booting]);
 
   // Monitor network connectivity & modem diagnostics event
   useEffect(() => {
@@ -244,9 +308,24 @@ export default function App() {
             onOpenRefinement={() => setIsRefinementModalOpen(true)}
           />
 
-          {/* Floating Actions: Make Refinement + Retro DOS Prompt */}
-          <div className="fixed bottom-4 right-4 z-40 flex items-center gap-2">
+          {/* Floating Actions: Gravatar QR + Make Refinement + Retro DOS Prompt */}
+          <div ref={floatingActionsRef} className="fixed bottom-4 right-4 z-40 flex items-center gap-2">
             <button
+              type="button"
+              onClick={() => {
+                retroAudio.playKeyclick();
+                setIsQrExpanded(true);
+              }}
+              className="h-9 w-9 shrink-0 cursor-pointer border-2 border-[var(--rm-status)] bg-white p-0.5 shadow-2xl"
+              title="Thomas Kenny — Gravatar profile"
+              aria-label="Expand the Gravatar QR code for Thomas Kenny"
+              id="floating-qr-btn"
+            >
+              <img src="/qr-gravatar.png" alt="" className="h-full w-full object-contain" />
+            </button>
+
+            <button
+              ref={floatingRefineRef}
               onClick={() => {
                 retroAudio.playKeyclick();
                 setIsRefinementModalOpen(true);
@@ -288,6 +367,53 @@ export default function App() {
             onClose={() => setIsRefinementModalOpen(false)}
             onOpenTerminal={() => setIsTerminalOpen(true)}
           />
+
+          {isQrExpanded && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="expanded-qr-title"
+              onClick={() => setIsQrExpanded(false)}
+            >
+              <div
+                className="w-full max-w-sm border-2 border-[var(--rm-status)] bg-[var(--bg-card)] p-5 text-center shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <a
+                  href={`${PERSONAL_INFO.gravatarUrl}?utm_source=qr`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => retroAudio.playKeyclick()}
+                  className="group block cursor-pointer"
+                >
+                  <span className="block bg-white p-3">
+                    <img
+                      src="/qr-gravatar.png"
+                      alt="QR code for Thomas Kenny's Gravatar profile"
+                      className="mx-auto aspect-square w-full max-w-[320px] object-contain"
+                    />
+                  </span>
+                  <span id="expanded-qr-title" className="mt-4 block font-mono text-sm font-bold text-[var(--text-primary)] group-hover:underline">
+                    Thomas Kenny — Gravatar profile
+                  </span>
+                  <span className="mt-1 block break-all font-mono text-[11px] text-[var(--text-secondary)]">
+                    {PERSONAL_INFO.gravatarUrl}
+                  </span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    retroAudio.playKeyclick();
+                    setIsQrExpanded(false);
+                  }}
+                  className="retro-btn mt-5 cursor-pointer px-4 py-2 font-mono text-xs font-bold"
+                >
+                  [ CLOSE ]
+                </button>
+              </div>
+            </div>
+          )}
 
           <FidoModal
             isOpen={isFidoModalOpen}

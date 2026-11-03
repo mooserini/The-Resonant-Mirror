@@ -28,6 +28,7 @@ export const ContactSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const gravatarQrUrl = `${PERSONAL_INFO.gravatarUrl}?utm_source=qr`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -113,6 +114,8 @@ export const ContactSection: React.FC = () => {
 
         {/* Form or Receipt View */}
         <div className="p-6 sm:p-8">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+            <div className="min-w-0 flex-1">
           {receipt ? (
             /* Submission Success Terminal Receipt */
             <div className="space-y-5">
@@ -309,6 +312,34 @@ export const ContactSection: React.FC = () => {
               </div>
             </form>
           )}
+            </div>
+
+            <aside className="mx-auto w-full max-w-xs shrink-0 lg:mx-0 lg:w-64" aria-label="Gravatar QR code">
+              <div className="border-2 border-[var(--border-strong)] bg-[var(--bg-secondary)] p-4 text-center shadow-lg">
+                <a
+                  href={gravatarQrUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => retroAudio.playKeyclick()}
+                  className="group block cursor-pointer"
+                >
+                  <span className="block bg-white p-2">
+                    <img
+                      src="/qr-gravatar.png"
+                      alt="QR code for Thomas Kenny's Gravatar profile"
+                      className="mx-auto aspect-square w-full max-w-[240px] object-contain"
+                    />
+                  </span>
+                  <span className="mt-3 block font-mono text-xs font-bold text-[var(--text-primary)] group-hover:underline">
+                    Thomas Kenny — Gravatar profile
+                  </span>
+                  <span className="mt-1 block break-all font-mono text-[10px] leading-relaxed text-[var(--text-secondary)]">
+                    {PERSONAL_INFO.gravatarUrl}
+                  </span>
+                </a>
+              </div>
+            </aside>
+          </div>
         </div>
 
       </div>
