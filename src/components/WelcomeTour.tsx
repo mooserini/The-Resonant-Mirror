@@ -150,15 +150,26 @@ export const WelcomeTour: React.FC<{ onFinish: () => void }> = ({ onFinish }) =>
     const el = resolveTargetEl(current);
     if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
     const t = window.setTimeout(measure, 380);
+    let resizeTimer: number | undefined;
     const onResize = () => {
       // Crossing the xl breakpoint mid-tour swaps which targets
       // exist: match the menu to the new width, then re-measure.
       syncMobileMenu();
       measure();
+      // If the sync just toggled the hamburger menu, the dropdown
+      // mounts only once Navbar's state commits — after this
+      // handler returns. A step whose target lives in the menu
+      // would measure in the gap and keep the centered fallback
+      // for good, so measure again on the step-change path's
+      // deferral; repeated resizes replace the pending timer
+      // instead of stacking.
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(measure, 380);
     };
     window.addEventListener('resize', onResize);
     return () => {
       window.clearTimeout(t);
+      window.clearTimeout(resizeTimer);
       window.removeEventListener('resize', onResize);
     };
   }, [current, measure, syncMobileMenu]);
