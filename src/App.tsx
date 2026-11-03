@@ -377,7 +377,7 @@ export default function App() {
               onClick={() => setIsQrExpanded(false)}
             >
               <div
-                className="w-full max-w-sm border-2 border-[var(--rm-status)] bg-[var(--bg-card)] p-5 text-center shadow-2xl"
+                className="w-full max-w-sm max-h-[90vh] overflow-y-auto border-2 border-[var(--rm-status)] bg-[var(--bg-card)] p-5 text-center shadow-2xl"
                 onClick={(event) => event.stopPropagation()}
               >
                 <a
