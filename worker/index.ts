@@ -7,7 +7,7 @@ import { serveEnroll } from './relayEnroll';
 const redDoorPaths = new Set([
   '/mirror.css', '/mirror.js', '/door.js', '/pacing.js', '/auth.js', '/barkeep.js',
   '/assets/projects-core.v1.js', '/assets/projects.json',
-  '/assets/fonts/Ac437_ATT_PC6300.ttf', '/assets/linktree-qr-400.png',
+  '/assets/fonts/Ac437_ATT_PC6300.ttf', '/assets/linktree-qr-400.png', '/assets/gravatar-qr-400.png',
 ]);
 
 const legalPages = new Map([
